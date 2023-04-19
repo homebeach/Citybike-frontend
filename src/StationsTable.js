@@ -26,7 +26,7 @@ function StationsTable() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get("http://localhost:8080/stations");
-      setStations(result.data); // assuming there is only one journey
+      setStations(result.data);
     };
     fetchData();
   }, []);

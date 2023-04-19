@@ -9,10 +9,7 @@ function formatDuration(seconds) {
 
 function JourneysTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 200;
-
-  const lastIndex = currentPage * perPage;
-  const firstIndex = lastIndex - perPage;
+  const perPage = 50;
 
   const [departureStartDate, setDepartureStartDate] = useState('');
   const [departureEndDate, setDepartureEndDate] = useState('');
@@ -22,21 +19,29 @@ function JourneysTable() {
 
   const [journeys, setJourneys] = useState([]);
 
+  const [journeysCount, setJourneysCount] = useState(0);
+
   const [language, setLanguage] = React.useState('finnish');
 
   const [departureStationNameFilter, setDepartureStationNameFilter] = useState('');
 
   const [returnStationNameFilter, setReturnStationNameFilter] = useState('');
 
-
-
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:8080/journeys");
-      setJourneys(result.data);
+      const result = await axios.get("http://localhost:8080/journeyscount");
+      setJourneysCount(result.data);
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("http://localhost:8080/journeys?page=" + currentPage + "&size=" + perPage);
+      setJourneys(result.data);
+    };
+    fetchData();
+  }, [currentPage]);
 
   const handleDepartureStationNameChange = (departureStationNameFilter) => {
     setDepartureStationNameFilter(departureStationNameFilter);
@@ -45,7 +50,6 @@ function JourneysTable() {
   const handleReturnStationNameChange = (returnStationNameFilter) => {
     setReturnStationNameFilter(returnStationNameFilter);
   };
-
 
   const handleClickPrevious = () => {
     if (currentPage > 1) {
@@ -136,8 +140,7 @@ function JourneysTable() {
       || (returnStationNimi && returnStationNimi.includes(returnStationNameFilter)))
       );
   });
-  const totalPages = Math.ceil(filteredResults.length / perPage);
-  const currentResults = filteredResults.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(journeysCount / perPage) - 1;
  
   return (
     <div>
@@ -201,9 +204,9 @@ function JourneysTable() {
             <th>Departure station</th>
             <th>Return station</th>
           </tr>
-        </thead>
+        </thead>ß
         <tbody>
-          {currentResults.map((result, index) => (
+          {filteredResults.map((result, index) => (
             <tr key={index}>
               <td>{formatDuration(result.duration)}</td>
               <td>{new Date(result.departure_time).toLocaleString()}</td>
