@@ -9,7 +9,7 @@ function formatDuration(seconds) {
 
 function JourneysTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 50;
+  const perPage = 100;
 
   const [departureStartDate, setDepartureStartDate] = useState('');
   const [departureEndDate, setDepartureEndDate] = useState('');
@@ -43,12 +43,12 @@ function JourneysTable() {
     fetchData();
   }, [currentPage]);
 
-  const handleDepartureStationNameChange = (departureStationNameFilter) => {
-    setDepartureStationNameFilter(departureStationNameFilter);
+  const handleDepartureStationNameChange = (event) => {
+    setDepartureStationNameFilter((event.target.value));
   };
 
-  const handleReturnStationNameChange = (returnStationNameFilter) => {
-    setReturnStationNameFilter(returnStationNameFilter);
+  const handleReturnStationNameChange = (event) => {
+    setReturnStationNameFilter((event.target.value));
   };
 
   const handleClickPrevious = () => {
@@ -184,13 +184,13 @@ function JourneysTable() {
 <div>
   <label>
     Departure station name filter: 
-    <input type="text" value={departureStationNameFilter} onChange={(event) => handleDepartureStationNameChange(event.target.value)} />
+    <input type="text" value={departureStationNameFilter} onChange={handleDepartureStationNameChange} />
   </label>
 </div>
 <div>
   <label>
     Return station name filter: 
-    <input type="text" value={returnStationNameFilter} onChange={(event) => handleReturnStationNameChange(event.target.value)} />
+    <input type="text" value={returnStationNameFilter} onChange={handleReturnStationNameChange} />
   </label>
 </div>
 
@@ -204,7 +204,7 @@ function JourneysTable() {
             <th>Departure station</th>
             <th>Return station</th>
           </tr>
-        </thead>ß
+        </thead>
         <tbody>
           {filteredResults.map((result, index) => (
             <tr key={index}>
