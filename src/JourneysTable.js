@@ -17,6 +17,8 @@ function JourneysTable() {
   const [returnStartDate, setReturnStartDate] = useState('');
   const [returnEndDate, setReturnEndDate] = useState('');
 
+  const [data, setData] = useState([]);
+
   const [journeys, setJourneys] = useState([]);
 
   const [journeysCount, setJourneysCount] = useState(0);
@@ -26,6 +28,8 @@ function JourneysTable() {
   const [departureStationNameFilter, setDepartureStationNameFilter] = useState('');
 
   const [returnStationNameFilter, setReturnStationNameFilter] = useState('');
+
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +43,7 @@ function JourneysTable() {
     const fetchData = async () => {
       const result = await axios.get("http://localhost:8080/journeys?page=" + (currentPage - 1) + "&size=" + perPage);
       setJourneys(result.data);
+      setData(result.data);
     };
     fetchData();
   }, [currentPage]);
@@ -69,6 +74,20 @@ function JourneysTable() {
 
   const handleChange = (event) => {
     setLanguage(event.target.value);
+  };
+
+  const handleSortClick = (field) => {
+    const newData = [...data];
+
+    if (sortOrder === 'asc') {
+      newData.sort((a, b) => (a[field] > b[field] ? 1 : -1));
+      setSortOrder('desc');
+    } else {
+      newData.sort((a, b) => (a[field] < b[field] ? 1 : -1));
+      setSortOrder('asc');
+    }
+
+    setData(newData);
   };
 
   const handleDepartureStartDateChange = (event) => {
@@ -111,35 +130,41 @@ function JourneysTable() {
     setReturnEndDate(`${year}-${month}-${day}T${hours}:${minutes}`);
   };
 
-  const filteredResults = journeys.filter(result => {
-    const departureTime = new Date(result.departure_time).getTime();
-    const formattedDepartureStartDate = departureStartDate ? new Date(departureStartDate).getTime() : null;
-    const formattedDepartureEndDate = departureEndDate ? new Date(departureEndDate).getTime() : null;
-  
-    const returnTime = new Date(result.return_time).getTime();
-    const formattedReturnStartDate = returnStartDate ? new Date(returnStartDate).getTime() : null;
-    const formattedReturnEndDate = returnEndDate ? new Date(returnEndDate).getTime() : null;
-    const departureStationName = result.departure_station_name;
-    const departureStationNamn = result.departure_station_namn;
-    const departureStationNimi = result.departure_station_nimi;
+  useEffect(()=>{
 
-    const returnStationName = result.return_station_name;
-    const returnStationNamn = result.return_station_namn;
-    const returnStationNimi = result.return_station_nimi;
+    const filteredResults = journeys.filter(result => {
+      const departureTime = new Date(result.departure_time).getTime();
+      const formattedDepartureStartDate = departureStartDate ? new Date(departureStartDate).getTime() : null;
+      const formattedDepartureEndDate = departureEndDate ? new Date(departureEndDate).getTime() : null;
+    
+      const returnTime = new Date(result.return_time).getTime();
+      const formattedReturnStartDate = returnStartDate ? new Date(returnStartDate).getTime() : null;
+      const formattedReturnEndDate = returnEndDate ? new Date(returnEndDate).getTime() : null;
+      const departureStationName = result.departure_station_name;
+      const departureStationNamn = result.departure_station_namn;
+      const departureStationNimi = result.departure_station_nimi;
 
-    return (
-      (!formattedDepartureStartDate || departureTime >= formattedDepartureStartDate) &&
-      (!formattedDepartureEndDate || departureTime <= formattedDepartureEndDate) &&
-      (!formattedReturnStartDate || departureTime >= formattedReturnStartDate) &&
-      (!formattedReturnEndDate || departureTime <= formattedReturnEndDate) &&
-      (!departureStationNameFilter || (departureStationName && departureStationName.includes(departureStationNameFilter))
-      || (departureStationNamn && departureStationNamn.includes(departureStationNameFilter))
-      || (departureStationNimi && departureStationNimi.includes(departureStationNameFilter))) &&
-      (!returnStationNameFilter || (returnStationName && returnStationName.includes(returnStationNameFilter))
-      || (returnStationNamn && returnStationNamn.includes(returnStationNameFilter))
-      || (returnStationNimi && returnStationNimi.includes(returnStationNameFilter)))
-      );
-  });
+      const returnStationName = result.return_station_name;
+      const returnStationNamn = result.return_station_namn;
+      const returnStationNimi = result.return_station_nimi;
+
+      return (
+        (!formattedDepartureStartDate || departureTime >= formattedDepartureStartDate) &&
+        (!formattedDepartureEndDate || departureTime <= formattedDepartureEndDate) &&
+        (!formattedReturnStartDate || departureTime >= formattedReturnStartDate) &&
+        (!formattedReturnEndDate || departureTime <= formattedReturnEndDate) &&
+        (!departureStationNameFilter || (departureStationName && departureStationName.includes(departureStationNameFilter))
+        || (departureStationNamn && departureStationNamn.includes(departureStationNameFilter))
+        || (departureStationNimi && departureStationNimi.includes(departureStationNameFilter))) &&
+        (!returnStationNameFilter || (returnStationName && returnStationName.includes(returnStationNameFilter))
+        || (returnStationNamn && returnStationNamn.includes(returnStationNameFilter))
+        || (returnStationNimi && returnStationNimi.includes(returnStationNameFilter)))
+        );
+    });
+
+    setData(filteredResults);
+  }, [departureStartDate, departureEndDate, returnStartDate, returnEndDate, departureStationNameFilter, returnStationNameFilter]);
+
   const totalPages = Math.ceil(journeysCount / perPage);
  
   return (
@@ -197,16 +222,16 @@ function JourneysTable() {
       <table>
         <thead>
           <tr>
-            <th>Duration</th>
-            <th>Departure time</th>
-            <th>Return time</th>
-            <th>Covered distance (km)</th>
-            <th>Departure station</th>
-            <th>Return station</th>
+            <th onClick={() => handleSortClick('duration')}>Duration</th>
+            <th onClick={() => handleSortClick('departure_time')}>Departure time</th>
+            <th onClick={() => handleSortClick('return_time')}>Return time</th>
+            <th onClick={() => handleSortClick('covered_distance')}>Covered distance (km)</th>
+            <th onClick={() => handleSortClick('departure_station')}>Departure station</th>
+            <th onClick={() => handleSortClick('return_station')}>Return station</th>
           </tr>
         </thead>
         <tbody>
-          {filteredResults.map((result, index) => (
+          {data.map((result, index) => (
             <tr key={index}>
               <td>{formatDuration(result.duration)}</td>
               <td>{new Date(result.departure_time).toLocaleString()}</td>
