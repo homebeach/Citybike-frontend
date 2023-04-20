@@ -22,6 +22,10 @@ function StationsTable() {
 
   const [stationsCount, setStationsCount] = useState(0);
 
+  const [data, setData] = useState([]);
+
+  const [sortOrder, setSortOrder] = useState('asc');
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get("http://localhost:8080/stationscount");
@@ -30,11 +34,11 @@ function StationsTable() {
     fetchData();
   }, []);
 
-
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get("http://localhost:8080/stations?page=" + (currentPage - 1) + "&size=" + perPage);
       setStations(result.data);
+      setData(result.data);
     };
     fetchData();
   }, [currentPage]);
@@ -67,26 +71,45 @@ function StationsTable() {
     setLanguage(event.target.value);
   };
 
+  const handleSortClick = (field) => {
+    const newData = [...data];
+
+    if (sortOrder === 'asc') {
+      newData.sort((a, b) => (a[field] > b[field] ? 1 : -1));
+      setSortOrder('desc');
+    } else {
+      newData.sort((a, b) => (a[field] < b[field] ? 1 : -1));
+      setSortOrder('asc');
+    }
+
+    setData(newData);
+  };
+
   const totalPages = Math.ceil(stationsCount / perPage);
 
-  const filteredResults = stations.filter(result => {
+  useEffect(()=>{
 
-    const stationNimi = result.nimi;
-    const stationNamn = result.namn;
-    const stationName = result.name;
+    const filteredResults = stations.filter(result => {
 
-    const stationOsoite = result.osoite;
-    const stationAddress = result.address;
-
-    return (
-      (!stationNameFilter || (stationNimi && stationNimi.includes(stationNameFilter))
-      || (stationNamn && stationNamn.includes(stationNameFilter))
-      || (stationName && stationName.includes(stationNameFilter))) &&
-      (!addressFilter || (stationOsoite && stationOsoite.includes(addressFilter))
-      || (stationOsoite && stationOsoite.includes(addressFilter))
-      || (stationAddress && stationAddress.includes(addressFilter)))
-      );
+      const stationNimi = result.nimi;
+      const stationNamn = result.namn;
+      const stationName = result.name;
+  
+      const stationOsoite = result.osoite;
+      const stationAddress = result.address;
+  
+      return (
+        (!stationNameFilter || (stationNimi && stationNimi.includes(stationNameFilter))
+        || (stationNamn && stationNamn.includes(stationNameFilter))
+        || (stationName && stationName.includes(stationNameFilter))) &&
+        (!addressFilter || (stationOsoite && stationOsoite.includes(addressFilter))
+        || (stationOsoite && stationOsoite.includes(addressFilter))
+        || (stationAddress && stationAddress.includes(addressFilter)))
+        );
     });
+
+    setData(filteredResults);
+	}, [stationNameFilter, addressFilter]);
 
   return (
     <div>
@@ -122,18 +145,18 @@ function StationsTable() {
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Operator</th>
-            <th>Capacity</th>
-            <th>X</th>
-            <th>Y</th>
+            <th onClick={() => handleSortClick('id')}>ID</th>
+            <th onClick={() => handleSortClick('name')}>Name</th>
+            <th onClick={() => handleSortClick('address')}>Address</th>
+            <th onClick={() => handleSortClick('city')}>City</th>
+            <th onClick={() => handleSortClick('operator')}>Operator</th>
+            <th onClick={() => handleSortClick('capacity')}>Capacity</th>
+            <th onClick={() => handleSortClick('x')}>X</th>
+            <th onClick={() => handleSortClick('y')}>Y</th>
           </tr>
         </thead>
         <tbody>
-          {filteredResults.map((result, index) => (
+          {data.map((result, index) => (
             <tr key={index}>
               <td><Link to={`/station/${result.id}`}>{result.id}</Link></td>
 
