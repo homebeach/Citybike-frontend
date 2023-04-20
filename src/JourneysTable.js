@@ -37,7 +37,7 @@ function JourneysTable() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:8080/journeys?page=" + currentPage + "&size=" + perPage);
+      const result = await axios.get("http://localhost:8080/journeys?page=" + (currentPage - 1) + "&size=" + perPage);
       setJourneys(result.data);
     };
     fetchData();
@@ -140,7 +140,7 @@ function JourneysTable() {
       || (returnStationNimi && returnStationNimi.includes(returnStationNameFilter)))
       );
   });
-  const totalPages = Math.ceil(journeysCount / perPage) - 1;
+  const totalPages = Math.ceil(journeysCount / perPage);
  
   return (
     <div>

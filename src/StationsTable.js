@@ -10,10 +10,7 @@ function formatDuration(seconds) {
 
 function StationsTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 200;
-
-  const lastIndex = currentPage * perPage;
-  const firstIndex = lastIndex - perPage;
+  const perPage = 100;
 
   const [stationNameFilter, setStationNameFilter] = useState('');
 
@@ -23,13 +20,24 @@ function StationsTable() {
 
   const [stations, setStations] = useState([]);
 
+  const [stationsCount, setStationsCount] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:8080/stations");
-      setStations(result.data);
+      const result = await axios.get("http://localhost:8080/stationscount");
+      setStationsCount(result.data);
     };
     fetchData();
   }, []);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("http://localhost:8080/stations?page=" + (currentPage - 1) + "&size=" + perPage);
+      setStations(result.data);
+    };
+    fetchData();
+  }, [currentPage]);
 
   const handleStationNameChange = (stationNameFilter) => {
     setStationNameFilter(stationNameFilter);
@@ -59,7 +67,7 @@ function StationsTable() {
     setLanguage(event.target.value);
   };
 
-  const totalPages = Math.ceil(stations.length / perPage);
+  const totalPages = Math.ceil(stationsCount / perPage);
 
   const filteredResults = stations.filter(result => {
 
@@ -79,8 +87,6 @@ function StationsTable() {
       || (stationAddress && stationAddress.includes(addressFilter)))
       );
     });
-
-    const currentResults = filteredResults.slice(firstIndex, lastIndex);
 
   return (
     <div>
@@ -127,7 +133,7 @@ function StationsTable() {
           </tr>
         </thead>
         <tbody>
-          {currentResults.map((result, index) => (
+          {filteredResults.map((result, index) => (
             <tr key={index}>
               <td><Link to={`/station/${result.id}`}>{result.id}</Link></td>
 
