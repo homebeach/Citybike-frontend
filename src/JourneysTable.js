@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
+import { Button} from 'react-bootstrap';
 
 function formatDuration(seconds) {
   const minutes = Math.floor(seconds / 60);
@@ -222,12 +223,12 @@ function JourneysTable() {
       <table>
         <thead>
           <tr>
-            <th onClick={() => handleSortClick('duration')}>Duration</th>
-            <th onClick={() => handleSortClick('departure_time')}>Departure time</th>
-            <th onClick={() => handleSortClick('return_time')}>Return time</th>
-            <th onClick={() => handleSortClick('covered_distance')}>Covered distance (km)</th>
-            <th onClick={() => handleSortClick('departure_station')}>Departure station</th>
-            <th onClick={() => handleSortClick('return_station')}>Return station</th>
+            <th onClick={() => handleSortClick('duration')}><Button>Duration</Button></th>
+            <th onClick={() => handleSortClick('departure_time')}><Button>Departure time</Button></th>
+            <th onClick={() => handleSortClick('return_time')}><Button>Return time</Button></th>
+            <th onClick={() => handleSortClick('covered_distance')}><Button>Covered distance (km)</Button></th>
+            <th onClick={() => handleSortClick('departure_station')}><Button>Departure station</Button></th>
+            <th onClick={() => handleSortClick('return_station')}><Button>Return station</Button></th>
           </tr>
         </thead>
         <tbody>

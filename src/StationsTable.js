@@ -1,12 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-function formatDuration(seconds) {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes} minutes, ${remainingSeconds} seconds`;
-}
+import { Button} from 'react-bootstrap';
 
 function StationsTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -145,14 +140,14 @@ function StationsTable() {
       <table>
         <thead>
           <tr>
-            <th onClick={() => handleSortClick('id')}>ID</th>
-            <th onClick={() => handleSortClick('name')}>Name</th>
-            <th onClick={() => handleSortClick('address')}>Address</th>
-            <th onClick={() => handleSortClick('city')}>City</th>
-            <th onClick={() => handleSortClick('operator')}>Operator</th>
-            <th onClick={() => handleSortClick('capacity')}>Capacity</th>
-            <th onClick={() => handleSortClick('x')}>X</th>
-            <th onClick={() => handleSortClick('y')}>Y</th>
+            <th onClick={() => handleSortClick('id')}><Button>ID</Button></th>
+            <th onClick={() => handleSortClick('name')}><Button>Name</Button></th>
+            <th onClick={() => handleSortClick('address')}><Button>Address</Button></th>
+            <th onClick={() => handleSortClick('city')}><Button>City</Button></th>
+            <th onClick={() => handleSortClick('operator')}><Button>Operator</Button></th>
+            <th onClick={() => handleSortClick('capacity')}><Button>Capacity</Button></th>
+            <th onClick={() => handleSortClick('x')}><Button>X</Button></th>
+            <th onClick={() => handleSortClick('y')}><Button>Y</Button></th>
           </tr>
         </thead>
         <tbody>
