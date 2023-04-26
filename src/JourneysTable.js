@@ -8,7 +8,7 @@ function formatDuration(seconds) {
   return `${minutes} minutes, ${remainingSeconds} seconds`;
 }
 
-function JourneysTable() {
+function JourneysTable({backend_url}) {
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 100;
 
@@ -34,7 +34,7 @@ function JourneysTable() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:8080/journeyscount");
+      const result = await axios.get(backend_url + "/journeyscount");
       setJourneysCount(result.data);
     };
     fetchData();
@@ -42,7 +42,7 @@ function JourneysTable() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:8080/journeys?page=" + (currentPage - 1) + "&size=" + perPage);
+      const result = await axios.get(backend_url + "/journeys?page=" + (currentPage - 1) + "&size=" + perPage);
       setJourneys(result.data);
       setData(result.data);
     };

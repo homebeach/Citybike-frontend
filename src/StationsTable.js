@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button} from 'react-bootstrap';
 
-function StationsTable() {
+function StationsTable({backend_url}) {
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 100;
 
@@ -21,9 +21,10 @@ function StationsTable() {
 
   const [sortOrder, setSortOrder] = useState('asc');
 
+
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:8080/stationscount");
+      const result = await axios.get(backend_url + "/stationscount");
       setStationsCount(result.data);
     };
     fetchData();
@@ -31,7 +32,7 @@ function StationsTable() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:8080/stations?page=" + (currentPage - 1) + "&size=" + perPage);
+      const result = await axios.get(backend_url + "/stations?page=" + (currentPage - 1) + "&size=" + perPage);
       setStations(result.data);
       setData(result.data);
     };

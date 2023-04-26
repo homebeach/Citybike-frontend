@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 
-function Station() {
+function Station({backend_url}) {
   const { stationId } = useParams(); // get stationId from URL params
   const [station, setStation] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(`http://localhost:8080/station?stationId=${stationId}`);
+      const result = await axios.get(backend_url + `/station?stationId=${stationId}`);
       setStation(result.data);
     };
     fetchData();
@@ -19,7 +19,7 @@ function Station() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(`http://localhost:8080/top5returnstations?stationId=${stationId}`);
+      const result = await axios.get(backend_url + `/top5returnstations?stationId=${stationId}`);
       setReturnStations(result.data); 
     };
     fetchData();
@@ -29,7 +29,7 @@ function Station() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(`http://localhost:8080/top5departurestations?stationId=${stationId}`);
+      const result = await axios.get(backend_url + `/top5departurestations?stationId=${stationId}`);
       setDepartureStations(result.data); 
     };
     fetchData();

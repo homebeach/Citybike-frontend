@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/ff5ce4d2-395d-4bdc-be0c-f9fa7491e6fb/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/citybike-frontend",
+    "appService.deploySubpath": "."
+}

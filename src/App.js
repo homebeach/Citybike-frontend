@@ -8,6 +8,9 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 function App() {
   
+  const backend_url = "https://citybike-backend-citybike-backend.azuremicroservices.io";
+
+
   return (
     <BrowserRouter>
       <div>
@@ -22,13 +25,13 @@ function App() {
           </ul>
         </nav>
         <Routes>
-          <Route path="/journeys" element={<JourneysTable/>} />
+          <Route path="/journeys" element={<JourneysTable backend_url={backend_url} />} />
         </Routes>
         <Routes>
-          <Route path="/stations" element={<StationsTable/>} />
+          <Route path="/stations" element={<StationsTable backend_url={backend_url} />} />
         </Routes>
         <Routes>
-          <Route path="/station/:stationId" element={<Station />} />
+          <Route path="/station/:stationId" element={<Station backend_url={backend_url} />} />
         </Routes>
       </div>
     </BrowserRouter>
