@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-
 function Station({backend_url}) {
   const { stationId } = useParams(); // get stationId from URL params
   const [station, setStation] = useState({});
@@ -13,7 +12,7 @@ function Station({backend_url}) {
       setStation(result.data);
     };
     fetchData();
-  }, [stationId]);
+  }, [stationId, backend_url]);
 
   const [returnStations, setReturnStations] = useState([]);
 
@@ -23,7 +22,7 @@ function Station({backend_url}) {
       setReturnStations(result.data); 
     };
     fetchData();
-  }, [stationId]);
+  }, [stationId, backend_url]);
 
   const [departureStations, setDepartureStations] = useState([]);
 
@@ -33,7 +32,7 @@ function Station({backend_url}) {
       setDepartureStations(result.data); 
     };
     fetchData();
-  }, [stationId]);
+  }, [stationId, backend_url]);
 
   const [language, setLanguage] = React.useState('finnish');
 

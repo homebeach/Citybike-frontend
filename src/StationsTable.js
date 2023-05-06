@@ -28,7 +28,7 @@ function StationsTable({backend_url}) {
       setStationsCount(result.data);
     };
     fetchData();
-  }, []);
+  }, [backend_url]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +37,7 @@ function StationsTable({backend_url}) {
       setData(result.data);
     };
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, backend_url]);
 
   const handleStationNameChange = (stationNameFilter) => {
     setStationNameFilter(stationNameFilter);
@@ -105,7 +105,7 @@ function StationsTable({backend_url}) {
     });
 
     setData(filteredResults);
-	}, [stationNameFilter, addressFilter]);
+	}, [stationNameFilter, addressFilter, stations]);
 
   return (
     <div>

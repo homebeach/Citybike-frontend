@@ -38,7 +38,7 @@ function JourneysTable({backend_url}) {
       setJourneysCount(result.data);
     };
     fetchData();
-  }, []);
+  }, [backend_url]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +47,7 @@ function JourneysTable({backend_url}) {
       setData(result.data);
     };
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, backend_url]);
 
   const handleDepartureStationNameChange = (event) => {
     setDepartureStationNameFilter((event.target.value));
@@ -138,7 +138,6 @@ function JourneysTable({backend_url}) {
       const formattedDepartureStartDate = departureStartDate ? new Date(departureStartDate).getTime() : null;
       const formattedDepartureEndDate = departureEndDate ? new Date(departureEndDate).getTime() : null;
     
-      const returnTime = new Date(result.return_time).getTime();
       const formattedReturnStartDate = returnStartDate ? new Date(returnStartDate).getTime() : null;
       const formattedReturnEndDate = returnEndDate ? new Date(returnEndDate).getTime() : null;
       const departureStationName = result.departure_station_name;
@@ -164,7 +163,7 @@ function JourneysTable({backend_url}) {
     });
 
     setData(filteredResults);
-  }, [departureStartDate, departureEndDate, returnStartDate, returnEndDate, departureStationNameFilter, returnStationNameFilter]);
+  }, [departureStartDate, departureEndDate, returnStartDate, returnEndDate, departureStationNameFilter, returnStationNameFilter, journeys]);
 
   const totalPages = Math.ceil(journeysCount / perPage);
  
