@@ -8,8 +8,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 function App() {
   
-  const backend_url = "https://citybike-backend-citybike-backend.azuremicroservices.io";
-
+  const backend_url = "http://localhost:8080";
 
   return (
     <BrowserRouter>
